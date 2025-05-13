@@ -1,0 +1,69 @@
+Bootstrap: docker
+From: ubuntu:22.04
+
+%labels
+    Author  Tomaz Mark Zorec
+    Email   tomaz-mark.zorec@mf.uni-lj.si, tomaz.mark.zorec@gmail.com
+    GitHub  fifthguy@github.com
+    Version v1.0
+    Description Container for CSSC including MARS, MAFFT, BioPython, SeqKit, and Seqtk
+
+%environment
+    export LC_ALL=C
+    export LANG=C
+    export PATH=/opt/mars:$PATH
+
+%post
+    # Update and install system dependencies
+    apt-get update && apt-get install -y \
+        build-essential \
+        git \
+        wget \
+        curl \
+        unzip \
+        python3 \
+        python3-pip \
+        zlib1g-dev \
+        libncurses5-dev \
+        libbz2-dev \
+        liblzma-dev \
+        libcurl4-openssl-dev \
+        libssl-dev \
+        cmake \
+        make \
+        gcc \
+        g++
+
+    # Install BioPython
+    pip3 install biopython
+
+    # Compile MAFFT from source
+    cd /opt && wget https://mafft.cbrc.jp/alignment/software/mafft-7.525-with-extensions-src.tgz
+    tar xvf mafft-7.525-with-extensions-src.tgz
+    cd mafft-7.525-with-extensions/core
+    make clean
+    make
+
+    mkdir -p /opt/mafft/bin
+    cp mafft /opt/mafft/bin/
+    chmod +x /opt/mafft/bin/*
+
+    # Install Seqtk
+    cd /opt && git clone https://github.com/lh3/seqtk.git
+    cd /opt/seqtk && make
+    ln -s /opt/seqtk/seqtk /usr/local/bin/seqtk
+
+    # Install SeqKit
+    cd /opt && wget https://github.com/shenwei356/seqkit/releases/download/v2.6.1/seqkit_linux_amd64.tar.gz
+    tar -xzf seqkit_linux_amd64.tar.gz
+    mv seqkit /usr/local/bin/
+    chmod +x /usr/local/bin/seqkit
+
+    # Clone and build MARS
+    cd /opt && git clone https://github.com/lorrainea/MARS.git
+    cd /opt/MARS
+    ./pre-install.sh
+    make
+    ln -s /opt/MARS/mars /usr/local/bin/mars
+
+
