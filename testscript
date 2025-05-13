@@ -1,0 +1,31 @@
+#!/bin/bash
+
+MARSPATH=$(realpath "$0")/submodules/MARS
+
+export PATH=$PATH:$MARSPATH
+
+nextflow run ./CSDT --in data/test1.fas --outdir simple_test1 --workflow simple;
+nextflow run ./CSDT --in data/test3.fas --outdir simple_test3 --workflow simple;
+
+nextflow run ./CSDT --in data/test1.fas --outdir adjust_test1 --workflow adjust;
+nextflow run ./CSDT --in data/test3.fas --outdir adjust_test3 --workflow adjust;
+
+nextflow run ./CSDT --in data/test1.fas --outdir adjust_rotate_test1 --workflow adjust_rotate;
+nextflow run ./CSDT --in data/test3.fas --outdir adjust_rotate_test3 --workflow adjust_rotate;
+
+nextflow run ./CSDT --in data/test1.fas --outdir adjust_rotate_2x_test1 --workflow adjust_rotate_2x;
+nextflow run ./CSDT --in data/test3.fas --outdir adjust_rotate_2x_test3 --workflow adjust_rotate_2x;
+
+paste \
+    simple_test1/similarity_scores.csv \
+    adjust_test1/similarity_scores.csv \
+    adjust_rotate_test1/similarity_scores.csv \
+    adjust_rotate_2x_test1/similarity_scores.csv \
+    > test1_summary.txt
+
+paste \
+    simple_test3/similarity_scores.csv \
+    adjust_test3/similarity_scores.csv \
+    adjust_rotate_test3/similarity_scores.csv \
+    adjust_rotate_2x_test3/similarity_scores.csv \
+    > test3_summary.txt
