@@ -32,7 +32,8 @@ From: ubuntu:22.04
         cmake \
         make \
         gcc \
-        g++
+        g++ \
+	libpcre3 
 
     # Install BioPython
     pip3 install biopython pandas
