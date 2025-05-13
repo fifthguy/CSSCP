@@ -1,2 +1,11 @@
 # Ignore container files
 *.sif
+*.sif*
+# ignore log files
+*.log*
+# ignore test results
+*_test*
+# ignore nextflow
+.nextflow/ 
+work/
+results/

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+nextflow run ./CSSCP --in data/test1.fas --outdir simple_test1 --workflow simple;

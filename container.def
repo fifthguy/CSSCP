@@ -35,18 +35,25 @@ From: ubuntu:22.04
         g++
 
     # Install BioPython
-    pip3 install biopython
+    pip3 install biopython pandas
 
     # Compile MAFFT from source
     cd /opt && wget https://mafft.cbrc.jp/alignment/software/mafft-7.525-with-extensions-src.tgz
     tar xvf mafft-7.525-with-extensions-src.tgz
-    cd mafft-7.525-with-extensions/core
+    cd /opt/mafft-7.525-with-extensions/core
     make clean
     make
+    make install
 
-    mkdir -p /opt/mafft/bin
-    cp mafft /opt/mafft/bin/
-    chmod +x /opt/mafft/bin/*
+    cd /opt/mafft-7.525-with-extensions/extensions
+	make clean 
+	make
+    make install
+
+    #mkdir -p /opt/mafft/bin
+    #cp mafft /opt/mafft/bin/
+    #chmod +x /opt/mafft/bin/*
+    #ln -s /opt/mafft/bin/mafft /usr/local/bin/mafft
 
     # Install Seqtk
     cd /opt && git clone https://github.com/lh3/seqtk.git
@@ -66,4 +73,12 @@ From: ubuntu:22.04
     make
     ln -s /opt/MARS/mars /usr/local/bin/mars
 
+    # Install Java (OpenJDK 17, recommended for Nextflow)
+    apt-get install -y openjdk-17-jre-headless
 
+    # Install Nextflow
+    wget -O /usr/local/bin/nextflow https://github.com/nextflow-io/nextflow/releases/download/v23.10.1/nextflow
+    chmod +x /usr/local/bin/nextflow
+
+%environment 
+	export PATH=$PATH #:/opt/mafft-7.525-with-extensions/scripts:/opt/mafft-7.525-with-extensions/extensions:/opt/mafft-7.525-with-extensions/binaries
