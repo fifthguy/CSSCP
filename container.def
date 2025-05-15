@@ -80,6 +80,3 @@ From: ubuntu:22.04
     # Install Nextflow
     wget -O /usr/local/bin/nextflow https://github.com/nextflow-io/nextflow/releases/download/v23.10.1/nextflow
     chmod +x /usr/local/bin/nextflow
-
-%environment 
-	export PATH=$PATH #:/opt/mafft-7.525-with-extensions/scripts:/opt/mafft-7.525-with-extensions/extensions:/opt/mafft-7.525-with-extensions/binaries

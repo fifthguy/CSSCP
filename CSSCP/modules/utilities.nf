@@ -45,6 +45,9 @@ EOF
 }
 
 process computeSimilarity {
+
+    publishDir params.outdir
+    
     input:
     path aligned_file
 
