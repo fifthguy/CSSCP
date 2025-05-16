@@ -119,11 +119,10 @@ EOF
 // }
 
 process computeAndMergeSimilarity {
-
-    publishDir params.outdir
+    publishDir params.outdir, mode: 'copy'
 
     input:
-    path alignments_dir
+    path aligned_files
 
     output:
     path "similarity_scores.csv"
@@ -166,8 +165,8 @@ def compute_similarity(filepath):
         return (pair_name, "ERROR", 0, 0, 0)
 
 def main():
-    align_dir = "${alignments_dir}"
-    files = [os.path.join(align_dir, f) for f in os.listdir(align_dir) if f.endswith(".fa")]
+    files = [f for f in os.listdir('.') if f.endswith('.fa')]
+    files = [os.path.abspath(f) for f in files]
     with Pool(cpu_count()) as pool:
         results = pool.map(compute_similarity, files)
     df = pd.DataFrame(results, columns=["seq1", "seq2", "identity", "query_cover", "alignment_length"])

@@ -2,7 +2,7 @@
 
 // Include processes from modules
 include { runMafftAdjust_1; runMarsRotate_1; runMafftAdjust_2; runMarsRotate_2; runMarsRotate_3; runMafftAdjust_3; runMafftAlignment } from './modules/alignments.nf'
-include { prepareMultifasta; splitSequences; computeSimilarity; mergeSimilarityScores; cleanupAlignments; cleanupIntermediaries} from './modules/utilities.nf' 
+include { prepareMultifasta; splitSequences; computeAndMergeSimilarity; cleanupAlignments; cleanupIntermediaries} from './modules/utilities.nf' 
 
 
 workflow dataprep {
@@ -82,8 +82,7 @@ workflow diagnostics {
 
     main:
     aligned = runMafftAlignment(input)
-    similarity_tsvs = computeSimilarity(aligned)
-    similarity_table = mergeSimilarityScores(similarity_tsvs.collect())
+    similarity_tsvs = computeAndMergeSimilarity(aligned.collect())
 
     cleanupIntermediaries("dummy")
 
